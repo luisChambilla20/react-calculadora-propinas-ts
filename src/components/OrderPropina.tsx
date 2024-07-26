@@ -1,4 +1,5 @@
 import React from "react";
+import { PropinasActions } from "../reducers/propinas-reducer";
 
 const tipOptions = [
   {
@@ -19,11 +20,11 @@ const tipOptions = [
 ];
 
 type OrderPropinaProps = {
-  settip: React.Dispatch<React.SetStateAction<number>>;
+  dispatch: React.Dispatch<PropinasActions>;
   tip: number;
 };
 
-export const OrderPropina = ({ settip, tip }: OrderPropinaProps) => {
+export const OrderPropina = ({ tip, dispatch }: OrderPropinaProps) => {
   return (
     <div>
       <h3 className="font-black text-2xl">Propina: </h3>
@@ -33,7 +34,9 @@ export const OrderPropina = ({ settip, tip }: OrderPropinaProps) => {
           <div key={item.id} className="flex gap-2">
             <label htmlFor={item.id}> {item.label} </label>
             <input
-              onChange={(e) => settip(+e.target.value)}
+              onChange={(e) =>
+                dispatch({ type: "set-tip", payload: { tip: +e.target.value } })
+              }
               id={item.id}
               name="tip"
               value={item.value}

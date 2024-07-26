@@ -1,14 +1,15 @@
+import { PropinasActions } from "../reducers/propinas-reducer";
 import type { MenuItem } from "../types";
 
 type MenuListProps = {
   item: MenuItem;
-  addOrder: (item: MenuItem) => void;
+  dispatch: React.Dispatch<PropinasActions>;
 };
 
-export const MenuList = ({ item, addOrder }: MenuListProps) => {
+export const MenuList = ({ item, dispatch }: MenuListProps) => {
   return (
     <button
-      onClick={() => addOrder(item)}
+      onClick={() => dispatch({ type: "add-order", payload: { item } })}
       className="border-2 border-teal-400 w-full flex justify-between p-4 hover:bg-teal-300 rounded-lg"
     >
       <p>{item.name}</p>

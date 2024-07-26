@@ -1,23 +1,25 @@
 import { useMemo } from "react";
 import { priceFormat } from "../helpers/priceFormar";
-import { OrderItem } from "../types";
+import { PropinasActions, PropinaState } from "../reducers/propinas-reducer";
 
 type OrderTotalsProps = {
-  order: OrderItem[];
-  tip: number;
-  resetOrder: () => void;
+  state: PropinaState;
+  dispatch: React.Dispatch<PropinasActions>;
 };
 
-export const OrderTotals = ({ order, tip, resetOrder }: OrderTotalsProps) => {
+export const OrderTotals = ({ state, dispatch }: OrderTotalsProps) => {
   const Subtotal = useMemo(() => {
-    return order.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  }, [order]);
+    return state.order.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+  }, [state.order]);
 
   const Propina = useMemo(() => {
-    return Subtotal * tip;
-  }, [tip, order]);
+    return Subtotal * state.tip;
+  }, [state]);
 
-  const TotalPagar = useMemo(() => Propina + Subtotal, [tip, order]);
+  const TotalPagar = useMemo(() => Propina + Subtotal, [state]);
 
   return (
     <>
@@ -36,8 +38,8 @@ export const OrderTotals = ({ order, tip, resetOrder }: OrderTotalsProps) => {
 
       <button
         className="uppercase font-black text-white bg-black w-full py-4 mt-6 border rounded-lg disabled:opacity-10"
-        disabled={order.length === 0}
-        onClick={resetOrder}
+        disabled={state.order.length === 0}
+        onClick={() => dispatch({ type: "reset-order" })}
       >
         Guardar orden
       </button>

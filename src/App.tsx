@@ -1,11 +1,15 @@
-// import { useState } from "react";
+import { useEffect, useReducer } from "react";
 import { MenuList } from "./components/MenuList";
 import { OrderContent } from "./components/OrderContent";
 import { menuItems } from "./db/db";
-import { useOrder } from "./hooks/useOrder";
+import { initialState, propinasReducer } from "./reducers/propinas-reducer";
 
 export const App = () => {
-  const { order, tip, settip, addOrder, deleteOrder, resetOrder } = useOrder();
+  const [state, dispatch] = useReducer(propinasReducer, initialState);
+
+  useEffect(() => {
+    localStorage.setItem("propinas", JSON.stringify(state));
+  }, [state]);
 
   return (
     <>
@@ -21,18 +25,12 @@ export const App = () => {
 
           <div className="space-y-2 mt-2 px-3">
             {menuItems.map((item) => (
-              <MenuList key={item.id} item={item} addOrder={addOrder} />
+              <MenuList key={item.id} item={item} dispatch={dispatch} />
             ))}
           </div>
         </div>
         <div className="border border-dashed border-slate-400 p-5 rounded-lg space-y-10">
-          <OrderContent
-            order={order}
-            deleteOrder={deleteOrder}
-            settip={settip}
-            tip={tip}
-            resetOrder={resetOrder}
-          />
+          <OrderContent state={state} dispatch={dispatch} />
         </div>
       </main>
     </>
